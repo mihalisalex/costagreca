@@ -87,7 +87,7 @@
 
   const show = { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" };
   const heroIn = gsap.timeline({ paused: true })
-    .fromTo(".hero-day", { scale: 1.18 }, { scale: 1, duration: 3.4, ease: "power2.out" }, 0)
+    .fromTo(".hero-media", { scale: 1.18 }, { scale: 1, duration: 3.4, ease: "power2.out" }, 0)
     .fromTo(".hero-content .eyebrow", { opacity: 0, y: 20 }, show, 0.25)
     .set(title, { opacity: 1 }, 0.4)
     .fromTo(".hero-title .ch", { yPercent: 115 }, { yPercent: 0, duration: 1.3, stagger: 0.045, ease: "expo.out" }, 0.4)
@@ -119,13 +119,14 @@
     heroIn.play();
   }
 
-  /* ---------- Hero: golden hour fades to twilight as you scroll ---------- */
+  /* ---------- Hero: golden hour fades to twilight as you scroll ----------
+     Both photos share the same framing, so they move together and only the light changes. */
   gsap.timeline({
     scrollTrigger: { trigger: ".hero", start: "top top", end: "+=100%", scrub: true, pin: true }
   })
     .to(".hero-content", { yPercent: -20, opacity: 0, ease: "none", duration: 0.5 }, 0)
     .to(".hero-day", { opacity: 0, ease: "none", duration: 0.65 }, 0.15)
-    .fromTo(".hero-night", { scale: 1.15 }, { scale: 1, ease: "none", duration: 1 }, 0)
+    .fromTo(".hero-img", { scale: 1 }, { scale: 1.08, ease: "none", duration: 1 }, 0)
     .to(".hero-shade", { opacity: 0.55, ease: "none", duration: 1 }, 0);
 
   /* ---------- Facts count up ---------- */
