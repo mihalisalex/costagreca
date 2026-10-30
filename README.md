@@ -29,3 +29,19 @@ python3 -m http.server 4321
 ```
 
 Then open http://localhost:4321. The calendar sync only works when the site is deployed (or with `vercel dev`).
+
+## Guest area and villa office
+
+- `guest.html`: the guest area; guests sign in with the code from their booking
+- `owner.html`: the villa office, for creating bookings and codes, answering requests and editing villa details
+- `api/guest.js`, `api/owner.js`: server functions that talk to the Neon database
+- `js/guest-content.js`: the manual, Crete guide, experiences and fridge list guests see
+
+Vercel environment variables needed:
+
+| Variable | What it is |
+| --- | --- |
+| `DATABASE_URL` | Neon connection string (added automatically when Neon is connected to the Vercel project) |
+| `OWNER_PASSWORD` | The password for the villa office. Changing it signs every device out |
+
+The database tables are created automatically on the first request.

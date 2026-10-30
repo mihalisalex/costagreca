@@ -1,14 +1,14 @@
 /* ==========================================================
    Costa Greca — Guest Residence
-   Talks to Supabase through the guest_* database functions,
-   passing the booking code each time. Until the project is
-   connected (empty portal-config.js), the code DEMO shows sample data.
+   Talks to /api/guest (Vercel + Neon), passing the booking code
+   each time. On a local preview without the API, the code DEMO
+   shows sample data.
    ========================================================== */
 
 (() => {
-  const { supabaseUrl, supabaseKey } = window.CG_PORTAL || {};
   const CONTENT = window.CG_CONTENT;
-  const DEMO = !supabaseUrl || !supabaseKey;
+  const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
+  let demo = false;
   const STORE_KEY = "cg-guest-code";
 
   const $ = sel => document.querySelector(sel);
@@ -23,13 +23,20 @@
   let session = null;
 
   /* ---------- API ---------- */
+  const ACTIONS = { guest_session: "session", guest_add_request: "add_request", guest_cancel_request: "cancel_request" };
+
   async function rpc(name, args) {
-    if (DEMO) return demoRpc(name, args);
-    const res = await fetch(`${supabaseUrl}/rest/v1/rpc/${name}`, {
+    if (demo) return demoRpc(name, args);
+    const res = await fetch("/api/guest", {
       method: "POST",
-      headers: { apikey: supabaseKey, "Content-Type": "application/json" },
-      body: JSON.stringify(args)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: ACTIONS[name], code: args.p_code, kind: args.p_kind, title: args.p_title,
+        details: args.p_details, requested_for: args.p_requested_for, id: args.p_id
+      })
     });
+    // A plain static preview has no API: fall back to sample data there.
+    if (LOCAL && (res.status === 404 || res.status === 501)) { demo = true; return demoRpc(name, args); }
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
   }
@@ -420,7 +427,7 @@
   }
 
   /* ---------- Demo data (only while Supabase isn't connected) ---------- */
-  const demo = { requests: [] };
+  const demoStore = { requests: [] };
   function demoRpc(name, args) {
     const valid = String(args.p_code || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === "DEMO";
     if (!valid) return Promise.resolve({ error: "invalid_code" });
@@ -428,11 +435,11 @@
     const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     const plus = n => { const d = new Date(today); d.setDate(d.getDate() + n); return iso(d); };
     if (name === "guest_add_request") {
-      demo.requests.unshift({ id: String(Date.now()), kind: args.p_kind, title: args.p_title, details: args.p_details, requested_for: args.p_requested_for, status: "requested", owner_note: null });
-      return Promise.resolve({ id: demo.requests[0].id, status: "requested" });
+      demoStore.requests.unshift({ id: String(Date.now()), kind: args.p_kind, title: args.p_title, details: args.p_details, requested_for: args.p_requested_for, status: "requested", owner_note: null });
+      return Promise.resolve({ id: demoStore.requests[0].id, status: "requested" });
     }
     if (name === "guest_cancel_request") {
-      const r = demo.requests.find(x => x.id === args.p_id);
+      const r = demoStore.requests.find(x => x.id === args.p_id);
       if (r) r.status = "cancelled";
       return Promise.resolve({ cancelled: !!r });
     }
@@ -447,7 +454,7 @@
         wifi_name: { value: "Sample-Network" }, wifi_password: { value: "sample-password" },
         gate_code: { value: "0000" }, door_code: { value: "0000" }
       },
-      requests: demo.requests
+      requests: demoStore.requests
     });
   }
 

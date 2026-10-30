@@ -25,7 +25,7 @@
       <p class="eyebrow light">Owner</p>
       <h1>Villa <em>office</em></h1>
       <p class="gate-lede" id="o-login-lede">Sign in to manage bookings and guest requests.</p>
-      <label class="r-field o-light"><span>Email</span><input type="email" name="email" autocomplete="username" required></label>
+      <input type="text" name="username" value="owner" autocomplete="username" hidden>
       <label class="r-field o-light"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
       <p class="gate-error" id="o-login-error" role="alert"></p>
       <button type="submit" class="btn btn-gold">Sign in</button>
@@ -107,8 +107,6 @@
 
   <div class="r-toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/portal-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
   <script src="js/owner.js" defer></script>
 </body>
 </html>
