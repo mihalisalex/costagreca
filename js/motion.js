@@ -124,7 +124,7 @@
   gsap.timeline({
     scrollTrigger: { trigger: ".hero", start: "top top", end: "+=100%", scrub: true, pin: true }
   })
-    .to(".hero-content", { yPercent: -20, opacity: 0, ease: "none", duration: 0.5 }, 0)
+    .to(".hero-content", { yPercent: -20, opacity: 0, ease: "none", duration: 0.35 }, 0)
     .to(".hero-day", { opacity: 0, ease: "none", duration: 0.65 }, 0.15)
     .fromTo(".hero-img", { scale: 1 }, { scale: 1.08, ease: "none", duration: 1 }, 0)
     .to(".hero-shade", { opacity: 0.55, ease: "none", duration: 1 }, 0);
