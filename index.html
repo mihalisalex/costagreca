@@ -14,9 +14,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/villa-front-golden-hour.jpg">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Turn on the cinematic version only when motion is welcome; the intro plays once per visit.
+    (function () {
+      var root = document.documentElement;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      root.classList.add("motion");
+      try { if (sessionStorage.getItem("cg-intro")) root.classList.add("intro-seen"); } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
+
+  <!-- ============ INTRO ============ -->
+  <div class="preloader" aria-hidden="true">
+    <div class="pl-panel pl-top"></div>
+    <div class="pl-panel pl-bottom"></div>
+    <div class="pl-mark">
+      <svg viewBox="0 0 120 120">
+        <rect class="pl-frame" x="1" y="1" width="118" height="118" pathLength="1"/>
+        <text class="pl-cg" x="60" y="73" text-anchor="middle">CG</text>
+      </svg>
+      <p class="pl-name">Costa Greca</p>
+    </div>
+  </div>
 
   <!-- ============ HEADER ============ -->
   <header class="site-header" id="top">
@@ -27,10 +50,11 @@
       </a>
       <nav class="main-nav" id="main-nav" aria-label="Main">
         <a href="#villa">The Villa</a>
-        <a href="#spaces">Spaces</a>
+        <a href="#estate">The Estate</a>
+        <a href="#suites">Suites</a>
         <a href="#gallery">Gallery</a>
         <a href="#location">Location</a>
-        <a href="#booking" class="btn btn-outline nav-cta">Book your stay</a>
+        <a href="#booking" class="btn btn-outline nav-cta" data-magnetic>Book your stay</a>
       </nav>
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
         <span></span><span></span>
@@ -39,20 +63,28 @@
   </header>
 
   <main>
-    <!-- ============ HERO ============ -->
+    <!-- ============ HERO (golden hour fades to twilight on scroll) ============ -->
     <section class="hero">
-      <img class="hero-img" fetchpriority="high" src="images/villa-front-golden-hour.jpg" alt="The neoclassical facade of Costa Greca at golden hour">
+      <div class="hero-media">
+        <img class="hero-img hero-night" src="images/villa-twilight.jpg" alt="" aria-hidden="true">
+        <img class="hero-img hero-day" fetchpriority="high" src="images/villa-front-golden-hour.jpg" alt="The neoclassical facade of Costa Greca at golden hour">
+      </div>
       <div class="hero-shade"></div>
       <div class="hero-content">
         <p class="eyebrow light">Karteros &nbsp;·&nbsp; Heraklion &nbsp;·&nbsp; Crete</p>
-        <h1 class="hero-title">Costa Greca</h1>
+        <h1 class="hero-title" aria-label="Costa Greca">Costa Greca</h1>
         <p class="hero-sub"><em>The Greek Coastline</em></p>
         <div class="meander light" aria-hidden="true"></div>
         <p class="hero-lede">A private neoclassical villa with a modern soul, steps from the Cretan sea.</p>
         <div class="hero-actions">
-          <a href="#booking" class="btn btn-gold">Check availability</a>
-          <a href="#villa" class="btn btn-ghost">Discover the villa</a>
+          <a href="#booking" class="btn btn-gold" data-magnetic>Check availability</a>
+          <a href="#villa" class="btn btn-ghost" data-magnetic>Discover the villa</a>
         </div>
+      </div>
+      <div class="hero-meta" aria-live="off">
+        <span>Karteros, Crete</span>
+        <span id="meta-time"></span>
+        <span id="meta-weather"></span>
       </div>
       <a href="#villa" class="scroll-cue" aria-label="Scroll down"><span></span></a>
     </section>
@@ -60,8 +92,8 @@
     <!-- ============ FACTS BAR ============ -->
     <section class="facts" aria-label="Villa at a glance">
       <div class="facts-inner">
-        <div class="fact"><span class="fact-num">14</span><span class="fact-label">Guests</span></div>
-        <div class="fact"><span class="fact-num">1</span><span class="fact-label">Private pool</span></div>
+        <div class="fact"><span class="fact-num" data-count="14">14</span><span class="fact-label">Guests</span></div>
+        <div class="fact"><span class="fact-num" data-count="1">1</span><span class="fact-label">Private pool</span></div>
         <div class="fact"><span class="fact-num fact-word">Karteros</span><span class="fact-label">Beach nearby</span></div>
         <div class="fact"><span class="fact-num fact-word">Neoclassical</span><span class="fact-label">&amp; contemporary</span></div>
       </div>
@@ -72,14 +104,14 @@
       <div class="container intro-grid">
         <div class="intro-text reveal">
           <p class="eyebrow">The Villa</p>
-          <h2 class="section-title">A neoclassical residence,<br><em>reimagined for the Cretan coast</em></h2>
-          <p>Costa Greca takes its name from the Greek coastline it overlooks. Its architecture draws on the symmetry and grace of neoclassical design: columns, cornices, tall shuttered windows. Inside, the rooms are calm, contemporary and full of light.</p>
+          <h2 class="section-title" data-split>A neoclassical residence,<br><em>reimagined for the Cretan coast</em></h2>
+          <p>Costa Greca takes its name from the Greek coastline it overlooks. A limestone facade crowned by a classical pediment, wrought-iron balconies on every level, tall windows full of light. Inside, the rooms are calm and contemporary.</p>
           <p>This is one of the largest private villas on the north coast of Crete. It is made for families and friends who travel together: generous living rooms, a pergola-shaded dining terrace, landscaped gardens, a private basketball court and a pool at its heart. Up to fourteen guests can share it in comfort and complete privacy.</p>
-          <a href="#spaces" class="link-arrow">Explore the spaces</a>
+          <a href="#estate" class="link-arrow">Explore the estate</a>
         </div>
         <div class="intro-media reveal">
-          <img class="intro-img-main" src="images/villa-twilight.jpg" alt="Costa Greca lit up at twilight" loading="lazy">
-          <img class="intro-img-inset" src="images/bedroom-twin.jpg" alt="Twin bedroom with warm lighting" loading="lazy">
+          <div class="intro-frame-main" data-clip><img class="intro-img-main" src="images/villa-gardens-pergola.jpg" alt="Limestone facade, pergola terrace and landscaped garden" loading="lazy" data-parallax></div>
+          <div class="intro-frame-inset" data-clip><img class="intro-img-inset" src="images/villa-twilight.jpg" alt="Costa Greca lit up at twilight" loading="lazy"></div>
         </div>
       </div>
     </section>
@@ -88,44 +120,71 @@
     <section class="band">
       <div class="band-inner reveal">
         <div class="meander light" aria-hidden="true"></div>
-        <blockquote>Where neoclassical grandeur<br>meets the light of the Aegean.</blockquote>
+        <blockquote data-split>Where neoclassical grandeur<br>meets the light of the Aegean.</blockquote>
       </div>
     </section>
 
-    <!-- ============ SPACES ============ -->
-    <section class="section spaces" id="spaces">
-      <div class="container">
-        <header class="section-head reveal">
-          <p class="eyebrow">Spaces</p>
-          <h2 class="section-title">Room to gather, <em>room to retreat</em></h2>
+    <!-- ============ ESTATE TOUR (pinned aerial, zooms to each feature on scroll) ============ -->
+    <section class="estate" id="estate">
+      <div class="estate-stage">
+        <div class="estate-canvas">
+          <img src="images/villa-aerial-pool-court.jpg" alt="Aerial view of Costa Greca: the villa, pool, pergola, gardens and basketball court within walled grounds" loading="lazy">
+        </div>
+        <div class="estate-shade"></div>
+        <div class="estate-ring" aria-hidden="true"></div>
+        <header class="estate-head">
+          <p class="eyebrow light">The Estate</p>
+          <h2 class="section-title light">Explore <em>the grounds</em></h2>
+          <p class="estate-hint">Scroll to tour the villa from above</p>
         </header>
+        <ol class="estate-points">
+          <li data-x="0.435" data-y="0.36" data-s="2.6">
+            <span class="ep-num">01</span>
+            <h3>Private pool</h3>
+            <p>Sun loungers line the water's edge, framed by palms, lawns and the Cretan sky.</p>
+          </li>
+          <li data-x="0.31" data-y="0.3" data-s="2.8">
+            <span class="ep-num">02</span>
+            <h3>Pergola lounge</h3>
+            <p>A shaded outdoor lounge and dining table, a few steps from the pool.</p>
+          </li>
+          <li data-x="0.66" data-y="0.31" data-s="2.4">
+            <span class="ep-num">03</span>
+            <h3>The residence</h3>
+            <p>Three levels of limestone, balconies and terraces, with a covered dining terrace on the upper floor.</p>
+          </li>
+          <li data-x="0.79" data-y="0.46" data-s="2.3">
+            <span class="ep-num">04</span>
+            <h3>Landscaped gardens</h3>
+            <p>Clipped hedges, lawns and tall cypress trees create a calm, private garden.</p>
+          </li>
+          <li data-x="0.43" data-y="0.64" data-s="1.9">
+            <span class="ep-num">05</span>
+            <h3>Basketball court</h3>
+            <p>A private court within the walled grounds, for every age to play.</p>
+          </li>
+        </ol>
+        <div class="estate-progress" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
 
-        <article class="space reveal">
-          <div class="space-media"><img src="images/villa-gardens-pergola.jpg" alt="Limestone facade, pergola terrace and landscaped garden" loading="lazy"></div>
-          <div class="space-text">
-            <span class="space-num">I</span>
-            <h3>The Residence</h3>
-            <p>A limestone facade crowned by a classical pediment, with wrought-iron balconies on every level. The pergola terrace holds a long dining table for evenings outdoors with Cretan wine, local cheeses and fresh seafood from the nearby harbour.</p>
+    <!-- ============ SUITES (horizontal scroll) ============ -->
+    <section class="suites" id="suites">
+      <div class="suites-pin">
+        <div class="suites-track">
+          <div class="suites-intro">
+            <p class="eyebrow">Bedrooms &amp; Suites</p>
+            <h2 class="section-title" data-split>Rooms for <em>slow mornings</em></h2>
+            <p>Serene bedrooms dressed in fine linen sleep up to fourteen guests. Warm wood, marble floors and sculptural lighting create a private retreat. Many rooms look out over the olive trees towards the sea.</p>
+            <p class="suites-hint">Keep scrolling <span aria-hidden="true">&rarr;</span></p>
           </div>
-        </article>
-
-        <article class="space reverse reveal">
-          <div class="space-media"><img src="images/bedroom-garden-view.jpg" alt="Bedroom with balcony doors opening onto the garden" loading="lazy"></div>
-          <div class="space-text">
-            <span class="space-num">II</span>
-            <h3>Bedrooms &amp; Suites</h3>
-            <p>Serene bedrooms dressed in fine linen sleep up to fourteen guests. Warm wood, marble floors and sculptural lighting create a private retreat, and many rooms look out over the olive trees towards the sea.</p>
-          </div>
-        </article>
-
-        <article class="space reveal">
-          <div class="space-media"><img src="images/villa-aerial-pool-court.jpg" alt="Aerial view of the villa, pool, gardens and basketball court" loading="lazy"></div>
-          <div class="space-text">
-            <span class="space-num">III</span>
-            <h3>Pool, Gardens &amp; Court</h3>
-            <p>The walled grounds hold a private pool with sun loungers, a shaded pergola, manicured gardens lined with cypress trees, and a full basketball court. There is room for every age to play, swim and unwind in complete privacy.</p>
-          </div>
-        </article>
+          <figure class="suite"><div class="suite-media"><img src="images/bedroom-garden-view.jpg" alt="Bedroom with balcony doors opening onto the garden" loading="lazy"></div><figcaption><span>01</span>Garden-view bedroom</figcaption></figure>
+          <figure class="suite"><div class="suite-media"><img src="images/bedroom-sea-view.jpg" alt="Bedroom with a glimpse of the sea" loading="lazy"></div><figcaption><span>02</span>Sea-view bedroom</figcaption></figure>
+          <figure class="suite"><div class="suite-media"><img src="images/bedroom-sunlit.jpg" alt="Sunlit bedroom with an olive tree" loading="lazy"></div><figcaption><span>03</span>Sunlit bedroom</figcaption></figure>
+          <figure class="suite"><div class="suite-media"><img src="images/bedroom-twin.jpg" alt="Twin bedroom with warm lighting" loading="lazy"></div><figcaption><span>04</span>Twin bedroom</figcaption></figure>
+          <figure class="suite"><div class="suite-media"><img src="images/bedroom-overhead.jpg" alt="Bedroom seen from above" loading="lazy"></div><figcaption><span>05</span>A room from above</figcaption></figure>
+        </div>
+        <div class="suites-counter" aria-hidden="true"><span class="sc-current">01</span> / 05</div>
       </div>
     </section>
 
@@ -135,7 +194,7 @@
       <div class="container">
         <header class="section-head center reveal">
           <p class="eyebrow">Amenities</p>
-          <h2 class="section-title">Every comfort, <em>quietly considered</em></h2>
+          <h2 class="section-title" data-split>Every comfort, <em>quietly considered</em></h2>
           <div class="meander" aria-hidden="true"></div>
         </header>
         <ul class="amenity-grid reveal">
@@ -156,17 +215,17 @@
       <div class="container">
         <header class="section-head reveal">
           <p class="eyebrow">Gallery</p>
-          <h2 class="section-title">A closer look</h2>
+          <h2 class="section-title" data-split>A closer look</h2>
         </header>
         <div class="gallery-grid reveal">
-          <button class="g-item g-wide" data-full="images/villa-aerial-pool-court.jpg"><img src="images/villa-aerial-pool-court.jpg" alt="Aerial view of the estate" loading="lazy"></button>
-          <button class="g-item" data-full="images/bedroom-sea-view.jpg"><img src="images/bedroom-sea-view.jpg" alt="Bedroom with sea view" loading="lazy"></button>
-          <button class="g-item g-tall" data-full="images/villa-twilight.jpg"><img src="images/villa-twilight.jpg" alt="The villa at twilight" loading="lazy"></button>
-          <button class="g-item" data-full="images/bedroom-twin.jpg"><img src="images/bedroom-twin.jpg" alt="Twin bedroom" loading="lazy"></button>
-          <button class="g-item" data-full="images/bedroom-sunlit.jpg"><img src="images/bedroom-sunlit.jpg" alt="Sunlit bedroom with olive tree" loading="lazy"></button>
-          <button class="g-item g-wide" data-full="images/villa-front-golden-hour.jpg"><img src="images/villa-front-golden-hour.jpg" alt="Front of the villa at golden hour" loading="lazy"></button>
-          <button class="g-item" data-full="images/bedroom-overhead.jpg"><img src="images/bedroom-overhead.jpg" alt="Bedroom seen from above" loading="lazy"></button>
-          <button class="g-item g-wide" data-full="images/villa-gardens-pergola.jpg"><img src="images/villa-gardens-pergola.jpg" alt="Gardens and pergola terrace" loading="lazy"></button>
+          <button data-cursor="View" class="g-item g-wide" data-full="images/villa-aerial-pool-court.jpg"><img src="images/villa-aerial-pool-court.jpg" alt="Aerial view of the estate" loading="lazy"></button>
+          <button data-cursor="View" class="g-item" data-full="images/bedroom-sea-view.jpg"><img src="images/bedroom-sea-view.jpg" alt="Bedroom with sea view" loading="lazy"></button>
+          <button data-cursor="View" class="g-item g-tall" data-full="images/villa-twilight.jpg"><img src="images/villa-twilight.jpg" alt="The villa at twilight" loading="lazy"></button>
+          <button data-cursor="View" class="g-item" data-full="images/bedroom-twin.jpg"><img src="images/bedroom-twin.jpg" alt="Twin bedroom" loading="lazy"></button>
+          <button data-cursor="View" class="g-item" data-full="images/bedroom-sunlit.jpg"><img src="images/bedroom-sunlit.jpg" alt="Sunlit bedroom with olive tree" loading="lazy"></button>
+          <button data-cursor="View" class="g-item g-wide" data-full="images/villa-front-golden-hour.jpg"><img src="images/villa-front-golden-hour.jpg" alt="Front of the villa at golden hour" loading="lazy"></button>
+          <button data-cursor="View" class="g-item" data-full="images/bedroom-overhead.jpg"><img src="images/bedroom-overhead.jpg" alt="Bedroom seen from above" loading="lazy"></button>
+          <button data-cursor="View" class="g-item g-wide" data-full="images/villa-gardens-pergola.jpg"><img src="images/villa-gardens-pergola.jpg" alt="Gardens and pergola terrace" loading="lazy"></button>
         </div>
       </div>
     </section>
@@ -176,7 +235,7 @@
       <div class="container location-grid">
         <div class="location-text reveal">
           <p class="eyebrow">Location</p>
-          <h2 class="section-title">Karteros, <em>on the north coast of Crete</em></h2>
+          <h2 class="section-title" data-split>Karteros, <em>on the north coast of Crete</em></h2>
           <p>Costa Greca is near Karteros Beach, a long stretch of golden sand east of Heraklion. Here you are close to everything: the island's capital, its finest archaeological sites and its tavernas. Yet the villa stays a world apart.</p>
           <!-- TODO: confirm these travel times from the villa -->
           <ul class="distances">
@@ -197,7 +256,7 @@
       <div class="container">
         <header class="section-head center reveal">
           <p class="eyebrow">Experiences</p>
-          <h2 class="section-title">The island <em>at your doorstep</em></h2>
+          <h2 class="section-title" data-split>The island <em>at your doorstep</em></h2>
           <div class="meander" aria-hidden="true"></div>
         </header>
         <div class="exp-grid">
@@ -317,6 +376,13 @@
     <button class="lb-next" aria-label="Next photo">&#8250;</button>
   </div>
 
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"><div class="cursor-ring"><span class="cursor-label"></span></div><div class="cursor-dot"></div></div>
+
   <script src="js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="js/motion.js" defer></script>
 </body>
 </html>

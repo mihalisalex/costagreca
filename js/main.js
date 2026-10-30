@@ -33,12 +33,14 @@ onScroll();
 const navToggle = document.querySelector(".nav-toggle");
 navToggle.addEventListener("click", () => {
   const open = document.body.classList.toggle("nav-open");
+  if (open) window.lenis?.stop(); else window.lenis?.start();
   navToggle.setAttribute("aria-expanded", String(open));
   navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
 });
 document.querySelectorAll(".main-nav a").forEach(a => a.addEventListener("click", () => {
   document.body.classList.remove("nav-open");
   navToggle.setAttribute("aria-expanded", "false");
+  window.lenis?.start();
 }));
 
 document.getElementById("year").textContent = new Date().getFullYear();
@@ -83,11 +85,13 @@ function openLightbox(i) {
   showPhoto(i);
   lightbox.hidden = false;
   document.body.style.overflow = "hidden";
+  window.lenis?.stop();
   lightbox.querySelector(".lb-close").focus();
 }
 function closeLightbox() {
   lightbox.hidden = true;
   document.body.style.overflow = "";
+  window.lenis?.start();
   items[lbIndex].focus();
 }
 items.forEach((btn, i) => btn.addEventListener("click", () => openLightbox(i)));
