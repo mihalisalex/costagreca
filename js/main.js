@@ -19,10 +19,12 @@ const CONFIG = {
 const header = document.querySelector(".site-header");
 const mobileCta = document.querySelector(".mobile-cta");
 const bookingSection = document.getElementById("booking");
+const facts = document.querySelector(".facts");
 
 function onScroll() {
   const y = window.scrollY;
-  header.classList.toggle("scrolled", y > 60);
+  // Stay transparent over the hero (including its pinned day-to-night scene) until the next section reaches the header.
+  header.classList.toggle("scrolled", facts.getBoundingClientRect().top <= header.offsetHeight);
   const bookingTop = bookingSection.getBoundingClientRect().top;
   const footerVisible = document.querySelector(".site-footer").getBoundingClientRect().top < window.innerHeight;
   mobileCta.classList.toggle("show", y > window.innerHeight * 0.8 && bookingTop > window.innerHeight * 0.5 && !footerVisible);
