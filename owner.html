@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Owner · Costa Greca</title>
+  <meta name="theme-color" content="#0a1f2b">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body class="portal">
+
+  <!-- ============ SIGN IN ============ -->
+  <section class="gate" id="o-gate">
+    <img class="gate-bg" src="images/villa-twilight.jpg" alt="">
+    <div class="gate-shade"></div>
+    <a href="index.html" class="gate-back">&larr; Costa Greca</a>
+    <form class="gate-card" id="o-login" novalidate>
+      <span class="monogram">CG</span>
+      <p class="eyebrow light">Owner</p>
+      <h1>Villa <em>office</em></h1>
+      <p class="gate-lede" id="o-login-lede">Sign in to manage bookings and guest requests.</p>
+      <label class="r-field o-light"><span>Email</span><input type="email" name="email" autocomplete="username" required></label>
+      <label class="r-field o-light"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+      <p class="gate-error" id="o-login-error" role="alert"></p>
+      <button type="submit" class="btn btn-gold">Sign in</button>
+    </form>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="o-app" hidden>
+    <header class="r-header">
+      <a href="index.html" class="brand" aria-label="Costa Greca website">
+        <span class="monogram">CG</span>
+        <span class="brand-name">Villa office</span>
+      </a>
+      <button class="r-signout" id="o-signout" type="button">Sign out</button>
+    </header>
+
+    <div class="o-wrap">
+      <div class="o-tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="requests">Requests <span class="o-badge" id="o-new-count" hidden></span></button>
+        <button role="tab" aria-selected="false" data-tab="bookings">Bookings</button>
+        <button role="tab" aria-selected="false" data-tab="settings">Villa details</button>
+      </div>
+
+      <!-- Requests -->
+      <section data-panel="requests">
+        <div class="o-filter" id="o-filter">
+          <label class="chip"><input type="radio" name="f" value="open" checked><span>Open</span></label>
+          <label class="chip"><input type="radio" name="f" value="confirmed"><span>Confirmed</span></label>
+          <label class="chip"><input type="radio" name="f" value="all"><span>All</span></label>
+        </div>
+        <div id="o-requests"></div>
+      </section>
+
+      <!-- Bookings -->
+      <section data-panel="bookings" hidden>
+        <div class="o-grid">
+          <form class="r-card r-form" id="o-booking-form">
+            <h3>New booking</h3>
+            <label class="r-field"><span>Guest name</span><input name="guest_name" required maxlength="120" placeholder="e.g. The Müller family"></label>
+            <label class="r-field"><span>Guest email (optional)</span><input name="guest_email" type="email" maxlength="200"></label>
+            <div class="o-row2">
+              <label class="r-field"><span>Check-in</span><input name="check_in" type="date" required></label>
+              <label class="r-field"><span>Check-out</span><input name="check_out" type="date" required></label>
+            </div>
+            <div class="o-row2">
+              <label class="r-field"><span>Adults</span><input name="adults" type="number" min="1" max="14" value="2" required></label>
+              <label class="r-field"><span>Children</span><input name="children" type="number" min="0" max="13" value="0" required></label>
+            </div>
+            <label class="r-field"><span>Private notes</span><textarea name="notes" rows="2" maxlength="2000"></textarea></label>
+            <button class="btn btn-gold" type="submit">Create guest code</button>
+            <p class="r-form-msg" role="status"></p>
+            <div id="o-invite-box" hidden>
+              <p class="eyebrow">Invitation to send</p>
+              <div class="o-invite" id="o-invite"></div>
+              <button class="btn btn-outline" type="button" id="o-copy-invite">Copy invitation</button>
+            </div>
+          </form>
+          <div>
+            <table class="o-table">
+              <thead><tr><th>Guest</th><th>Dates</th><th>Code</th><th></th></tr></thead>
+              <tbody id="o-bookings"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Villa details -->
+      <section data-panel="settings" hidden>
+        <form class="r-card r-form" id="o-settings-form">
+          <h3>Villa details</h3>
+          <p class="r-muted">Guests with a valid code see these. Items marked "shown during stay only" appear from check-in day to check-out day.</p>
+          <div class="o-settings" id="o-settings"></div>
+          <button class="btn btn-gold" type="submit">Save details</button>
+          <p class="r-form-msg" role="status"></p>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="r-toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/portal-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script src="js/owner.js" defer></script>
+</body>
+</html>
